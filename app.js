@@ -10,6 +10,7 @@ var dashboardRouter = require('./routes/dashboard');
 var app = express();
 
 // view engine setup
+app.engine('ejs', require('express-ejs-extend'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
