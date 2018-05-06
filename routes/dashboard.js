@@ -138,8 +138,4 @@ router.post('/categories/delete/:id', (req, res, next) => {
   res.redirect('/dashboard/categories');
 })
 
-router.get('/signup', (req, res, next) => {
-  res.render('dashboard/signup');
-});
-
 module.exports = router;

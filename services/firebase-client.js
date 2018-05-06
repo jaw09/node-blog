@@ -1,4 +1,4 @@
-const firebase = require('firebase');
+var firebase = require('firebase');
 require('dotenv').config();
 
 var config = {
@@ -9,6 +9,6 @@ var config = {
     storageBucket: process.env.FIREBASE_STORAGEBUCKET,
     messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID
 };
-firebase.initializeApp(config);
+var app = firebase.initializeApp(config);
 
-module.exports = firebase;
+module.exports = app;
