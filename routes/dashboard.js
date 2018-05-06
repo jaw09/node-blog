@@ -3,17 +3,73 @@ const firebaseAdmin = require('../services/firebase-admin');
 
 const router = express.Router();
 const categoriesRef = firebaseAdmin.ref('/categories/');
+const articlesRef = firebaseAdmin.ref('/articles/');
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
   res.render('dashboard/index');
 });
 
-router.get('/article', function (req, res, next) {
-  res.render('dashboard/article');
-});
+// router.get('/article', (req, res, next) => {
+//   res.render('dashboard/article');
+// });
 
-router.get('/categories', function (req, res, next) {
+router.get('/article/create', (req, res, next) => {
+  categoriesRef.once('value')
+    .then((snapshot) => {
+      const categories = snapshot.val();
+      res.render('dashboard/article', {
+        categories
+      });
+    });
+})
+
+router.get('/article/:id', (req, res, next) => {
+  const id = req.param('id');
+  let categories = {};
+  categoriesRef.once('value')
+    .then((snapshot) => {
+      categories = snapshot.val();
+      return articlesRef.child(id).once('value');
+    })
+    .then((snapshot) => {
+      const article = snapshot.val();
+      res.render('dashboard/article', {
+        categories,
+        article
+      });
+    })
+})
+
+router.post('/article/create', (req, res, next) => {
+  const data = req.body;
+  const articleRef = articlesRef.push();
+  const key = articleRef.key;
+  const updateTime = Math.floor(Date.now() / 1000);
+  data.id = key;
+  data.updateTime = updateTime;
+  articleRef.set(data)
+    .then(() => {
+      res.redirect(`/dashboard/article/${key}`);
+    })
+    .catch((error) => {
+      console.log(error);
+      alert('伺服器發生異常');
+      res.redirect('/dashboard/article/create');
+    })
+})
+
+router.post('/article/update/:id', (req, res, next) => {
+  const data = req.body;
+  const id = req.param('id');
+  console.log(data);
+  articlesRef.child(id).update(data)
+    .then(() => {
+      res.redirect(`/dashboard/article/${id}`);
+    })
+})
+
+router.get('/categories', (req, res, next) => {
   const messages = req.flash('notification');
   categoriesRef.once('value')
     .then((snapshot) => {
@@ -53,7 +109,7 @@ router.post('/categories/delete/:id', (req, res, next) => {
   res.redirect('/dashboard/categories');
 })
 
-router.get('/signup', function (req, res, next) {
+router.get('/signup', (req, res, next) => {
   res.render('dashboard/signup');
 });
 
