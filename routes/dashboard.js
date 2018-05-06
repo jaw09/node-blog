@@ -1,5 +1,7 @@
 const express = require('express');
 const firebaseAdmin = require('../services/firebase-admin');
+const striptags = require('striptags');
+const moment = require('moment');
 
 const router = express.Router();
 const categoriesRef = firebaseAdmin.ref('/categories/');
@@ -7,12 +9,30 @@ const articlesRef = firebaseAdmin.ref('/articles/');
 
 /* GET users listing. */
 router.get('/', (req, res, next) => {
-  res.render('dashboard/index');
+  const status = req.query.status || 'public';
+  let categories = {};
+  categoriesRef.once('value')
+    .then((snapshot) => {
+      categories = snapshot.val();
+      return articlesRef.orderByChild('updateTime').once('value');
+    }).then((snapshot) => {
+      const articles = [];
+      snapshot.forEach((snapshotChild) => {
+        if (status === snapshotChild.val().status) {
+          articles.push(snapshotChild.val());
+        }
+      });
+      articles.reverse();
+      res.render('dashboard/index', {
+        categories,
+        articles,
+        striptags,
+        moment,
+        status,
+        page: 'archives'
+      });
+    })
 });
-
-// router.get('/article', (req, res, next) => {
-//   res.render('dashboard/article');
-// });
 
 router.get('/article/create', (req, res, next) => {
   categoriesRef.once('value')
@@ -69,6 +89,15 @@ router.post('/article/update/:id', (req, res, next) => {
     })
 })
 
+router.post('/article/delete/:id', (req, res, next) => {
+  const id = req.param('id');
+  console.log(id);
+  articlesRef.child(id).remove();
+  req.flash('notification', '文章已刪除');
+  res.send('文章已刪除');
+  res.end();
+})
+
 router.get('/categories', (req, res, next) => {
   const messages = req.flash('notification');
   categoriesRef.once('value')
@@ -77,7 +106,8 @@ router.get('/categories', (req, res, next) => {
       res.render('dashboard/categories', {
         categories,
         messages,
-        hasNotification: messages.length > 0
+        hasNotification: messages.length > 0,
+        page: 'categories'
       });
     })
 });
@@ -103,7 +133,6 @@ router.post('/categories/create', (req, res, next) => {
 
 router.post('/categories/delete/:id', (req, res, next) => {
   const id = req.param('id');
-  console.log(id);
   categoriesRef.child(id).remove();
   req.flash('notification', '刪除標籤分類');
   res.redirect('/dashboard/categories');
