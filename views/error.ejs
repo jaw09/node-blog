@@ -1,3 +1,13 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<% extend('./layouts/layout.ejs') %>
+    <div class="container">
+        <div class="hex-blog">
+            <div class="row justify-content-center my-5 ">
+                <div class="col-md-9">
+                    <h1>
+                        <%= title %>
+                    </h1>
+                    <a href="/" class="btn btn-primary btn-bg">回首頁</a>
+                </div>
+            </div>
+        </div>
+    </div>
