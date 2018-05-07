@@ -3,6 +3,15 @@
     <h3 class="d-flex justify-content-center">登入</h3>
     <div class="row justify-content-center">
         <div class="col-sm-6">
+            <% if(hasError) { %>
+                <div class="alert alert-warning">
+                    <%- error %>
+                </div>
+            <% } else if(hasLogout) { %>
+                <div class="alert alert-success">
+                    <%- logout %>
+                </div>
+            <% } %>
             <form method="POST" action="/auth/login">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email</label>

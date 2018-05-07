@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
 const flash = require('connect-flash');
+require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const dashboardRouter = require('./routes/dashboard');
@@ -34,8 +35,17 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const authCheck = function (req, res, next) {
+  console.log('middleware', req.session);
+  if (req.session.uid === process.env.ADMIN_UID) {
+    next();
+  } else {
+    return res.redirect('/auth');
+  }
+}
+
 app.use('/', indexRouter);
-app.use('/dashboard', dashboardRouter);
+app.use('/dashboard', authCheck, dashboardRouter);
 app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
