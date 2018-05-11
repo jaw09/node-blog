@@ -7,6 +7,7 @@ const router = express.Router();
 
 
 router.get('/', (req, res, next) => {
+    const session = req.session.uid ? true : false;
     const error = req.flash('error');
     const logout = req.flash('logout');
     res.render('auth/login', {
@@ -14,6 +15,7 @@ router.get('/', (req, res, next) => {
         hasError: error.length > 0,
         logout,
         hasLogout: logout.length > 0,
+        session
     });
 });
 
@@ -24,6 +26,7 @@ router.post('/login', (req, res, next) => {
         .then((user) => {
             req.session.uid = user.uid;
             req.session.mail = req.body.email;
+            req.flash('login', 'Welcome Back!');
             res.redirect('/dashboard');
         })
         .catch((error) => {
@@ -33,10 +36,12 @@ router.post('/login', (req, res, next) => {
 })
 
 router.get('/signup', (req, res, next) => {
+    const session = req.session.uid ? true : false;
     const error = req.flash('error');
     res.render('auth/signup', {
         error,
-        hasError: error.length > 0
+        hasError: error.length > 0,
+        session
     });
 });
 

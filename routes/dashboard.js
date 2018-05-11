@@ -10,6 +10,7 @@ const articlesRef = firebaseAdmin.ref('/articles/');
 /* GET users listing. */
 router.get('/', (req, res, next) => {
   const status = req.query.status || 'public';
+  const login = req.flash('login');
   let categories = {};
   categoriesRef.once('value')
     .then((snapshot) => {
@@ -29,7 +30,9 @@ router.get('/', (req, res, next) => {
         striptags,
         moment,
         status,
-        page: 'archives'
+        page: 'archives',
+        login,
+        hasLogin: login.length > 0
       });
     })
 });
