@@ -34,7 +34,41 @@ router.get('/', function (req, res, next) {
         articles: data,
         striptags,
         moment,
-        page
+        page,
+        hasArticle: true
+      });
+    })
+});
+
+router.get('/section/:id', function (req, res, next) {
+  const id = req.param('id');
+  let categories = {};
+  let currentPage = parseInt(req.param('page')) || 1;
+  categoriesRef.once('value')
+    .then((snapshot) => {
+      categories = snapshot.val();
+      return articlesRef.orderByChild('updateTime').once('value');
+    })
+    .then((snapshot) => {
+      const articles = [];
+      snapshot.forEach((snapshotChild) => {
+        if (snapshotChild.val().status === 'public' && snapshotChild.val().category === id) {
+          articles.push(snapshotChild.val());
+        }
+      })
+      articles.reverse();
+      const {
+        page,
+        data
+      } = convertPagination(articles, currentPage);
+      hasArticle = data.length > 0;
+      res.render('index', {
+        categories,
+        articles: data,
+        striptags,
+        moment,
+        page,
+        hasArticle
       });
     })
 });

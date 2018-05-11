@@ -12,7 +12,6 @@ const convertPagination = function (items, currentPage) {
     items.forEach((article, i) => {
         let item = i + 1;
         if (item >= minItem && item <= maxItem) {
-            console.log(article)
             data.push(article);
         }
     })

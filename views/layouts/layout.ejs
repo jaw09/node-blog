@@ -37,9 +37,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
-            <a class="nav-item nav-link" href="#">心得
+            <% for (let item in categories) { %>
+            <a class="nav-item nav-link" href="/section/<%- item %>"><%- categories[item].name %>
                 <span class="sr-only">(current)</span>
             </a>
+            <% } %>
         </div>
     </div>
 </nav>
@@ -49,7 +51,7 @@
 <footer class="bg-light text-muted py-5">
     <div class="container">
         <ul class="list-unstyled d-flex justify-content-between">
-            <li class="">© Copright 2017 六角部落格</li>
+            <li class="">© Copright 2018 賽伯格空間</li>
             <li class="ml-auto">
                 <a class="text-info mr-1" href="#">
                     <i class="fa fa-instagram" aria-hidden="true"></i>

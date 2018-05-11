@@ -1,25 +1,31 @@
 <% extend('./layouts/layout.ejs')%>
 <div class="container">
   <div class="row my-4 justify-content-center">
-  <% for (let item in articles) { %>
-    <div class="col-md-9">
-      <div class="card mb-3">
-        <div class="card-body">
-          <a href="/post/<%- articles[item].id %>"> <h2 class="text-primary"><%- articles[item].title%></h2></a>
-          <div class="d-flex flex-row text-secondary small">
-            <div class="p-2"><span class="fa fa-clock-o"></span><%- moment(articles[item].updateTime * 1000).format('MM-DD-YY') %></div>
-            <div class="p-2"><i class="fa fa-tag" aria-hidden="true"></i> 
-              <a href="#" class="text-info">
-                <%- categories[articles[item].category].name %>
-              </a>
+  <% if(hasArticle) { %>
+    <% for (let item in articles) { %>
+      <div class="col-md-9">
+        <div class="card mb-3">
+          <div class="card-body">
+            <a href="/post/<%- articles[item].id %>"> <h2 class="text-primary"><%- articles[item].title%></h2></a>
+            <div class="d-flex flex-row text-secondary small">
+              <div class="p-2"><span class="fa fa-clock-o"></span><%- moment(articles[item].updateTime * 1000).format('MM-DD-YY') %></div>
+              <div class="p-2"><i class="fa fa-tag" aria-hidden="true"></i> 
+                <a href="/section/<%- articles[item].category %>" class="text-info">
+                  <%- categories[articles[item].category].name %>
+                </a>
+              </div>
             </div>
-          </div>
-          <div>
-          <%- striptags(articles[item].content).slice(0, 150); %>...
+            <div>
+            <%- striptags(articles[item].content).slice(0, 150); %>...
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <% } %>
+    <% } else { %>
+      <div class="col-md-9">  
+        <h2>暫無文章，請耐心等待～</h2>
+      </div>
     <% } %>
   </div>
   <%- include('partials/pagination.ejs')%>
