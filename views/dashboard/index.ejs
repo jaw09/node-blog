@@ -1,62 +1,73 @@
 <% extend('./layouts/layout.ejs') %>
-  <div class="main container-fluid my-4">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-      <% if (hasLogin) { %>
-        <div class="alert alert-success">
-          <%- login %>
-        </div>
-      <% } %>
-        <div class="btn-group w-100">
-          <a href="/dashboard?status=public" class="btn btn-outline-secondary w-100 rounded-0 <% if(status === 'public') { %> active <% } %>">已發佈</a>
-          <a href="/dashboard?status=draft" class="btn btn-outline-secondary w-100 rounded-0 <% if(status === 'draft') { %> active <% } %>">草稿</a>
-          <a href="/dashboard/article/create" class="btn btn-primary">新增文章</a>
-        </div>
-        <% for (let item in articles) { %>
-        <div class="card my-3">
-          <h4 class="card-header">
-            <%- articles[item].title %>
-          </h4>
-          <div class="card-body">
-            <%- striptags(articles[item].content).slice(0, 150); %>...
-            <div>
-              <span class="fa fa-clock-o"></span>
-              <%- moment(articles[item].updateTime * 1000).format('MM-DD-YY') %> ,
-              <span class="fa fa-folder-open-o"></span>
-              <span>
-                <%- categories[articles[item].category].name %>
-              </span>
+  <div class="main container my-4">
+    <div class="row justify-content-center d-flex flex-row-reverse">
+    <% if (hasLogin) { %>
+  <div class="alert alert-success">
+    <%- login %>
+  </div>
+<% } %>
+<div class="col-md-4 mb-3">
+<div class="card">
+  <h4 class="card-header">部落格資訊</h4>
+  <div class="card-body">
+    <p>文章總數：
+      <%- articlesNum %>
+    </p>
+    <p>標籤總數：
+      <%- categoriesNum %>
+    </p>
+  </div>
+</div>
+</div>
+          <div class="col-md-8">
+            <div class="btn-group w-100">
+              <a href="/dashboard?status=public" class="btn btn-outline-secondary w-100 rounded-0 <% if(status === 'public') { %> active <% } %>">已發佈</a>
+              <a href="/dashboard?status=draft" class="btn btn-outline-secondary w-100 rounded-0 <% if(status === 'draft') { %> active <% } %>">草稿</a>
+              <a href="/dashboard/article/create" class="btn btn-primary">新增文章</a>
             </div>
+            <% for (let item in articles) { %>
+              <div class="card my-3">
+                <h4 class="card-header">
+                  <%- articles[item].title %>
+                </h4>
+                <div class="card-body">
+                  <%- striptags(articles[item].content).slice(0, 150); %>...
+                    <div>
+                      <span class="fa fa-clock-o"></span>
+                      <%- moment(articles[item].updateTime * 1000).format('MM-DD-YY') %> ,
+                        <span class="fa fa-folder-open-o"></span>
+                        <span>
+                          <%- categories[articles[item].category].name %>
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer p-0 btn-group">
+                  <a href="#" class="btn btn-outline-danger rounded-0 deletePost" data-id="<%- articles[item].id %>" data-title="<%- articles[item].title %>">刪除</a>
+                  <a href="/dashboard/article/<%- articles[item].id %>" class="btn btn-outline-secondary w-100 rounded-0">編輯</a>
+                  <a href="/post/<%- articles[item].id %>" target="_blank" class="btn btn-outline-secondary w-100 rounded-0">預覽</a>
+                </div>
+              </div>
+              <% } %>
           </div>
-          <div class="card-footer p-0 btn-group">
-            <a href="#" class="btn btn-outline-danger rounded-0 deletePost" data-id="<%- articles[item].id %>" data-title="<%- articles[item].title %>">刪除</a>
-            <a href="/dashboard/article/<%- articles[item].id %>" class="btn btn-outline-secondary w-100 rounded-0">編輯</a>
-
-            <a href="/post/<%- articles[item].id %>" target="_blank" class="btn btn-outline-secondary w-100 rounded-0">預覽</a>
-
-          </div>
-        </div>
-        <% } %>
-      </div>
     </div>
   </div>
 
   <script>
     const remove = document.querySelector('.deletePost');
     remove.addEventListener('click', function (e) {
-        e.preventDefault();
-        let xhr = new XMLHttpRequest();
-        const data = this.dataset;
-        const id = data.id;
-        const title = data.title;
-        if (confirm(`你確定要刪除${title}`)) {
-          xhr.open('POST', `/dashboard/article/delete/${id}`);
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhr.onload = function () {
-            console.log(xhr.responseText);
-          }
-          xhr.send();
+      e.preventDefault();
+      let xhr = new XMLHttpRequest();
+      const data = this.dataset;
+      const id = data.id;
+      const title = data.title;
+      if (confirm(`你確定要刪除${title}`)) {
+        xhr.open('POST', `/dashboard/article/delete/${id}`);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+          console.log(xhr.responseText);
         }
-        window.location = '/dashboard'
+        xhr.send();
+      }
+      window.location = '/dashboard'
     });
   </script>

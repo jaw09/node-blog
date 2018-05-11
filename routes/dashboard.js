@@ -24,9 +24,23 @@ router.get('/', (req, res, next) => {
         }
       });
       articles.reverse();
+
+      function objectLength(object) {
+        let length = 0;
+        for (let key in object) {
+          if (object.hasOwnProperty(key)) {
+            ++length;
+          }
+        }
+        return length;
+      };
+      const categoriesNum = objectLength(categories);
+      const articlesNum = articles.length;
       res.render('dashboard/index', {
         categories,
+        categoriesNum,
         articles,
+        articlesNum,
         striptags,
         moment,
         status,
