@@ -11,7 +11,7 @@ const articlesRef = firebaseAdmin.ref('articles');
 /* GET home page. */
 router.get('/', function (req, res, next) {
   let categories = {};
-  let currentPage = parseInt(req.param('page')) || 1;
+  const currentPage = parseInt(req.param('page')) || 1;
   categoriesRef.once('value')
     .then((snapshot) => {
       categories = snapshot.val();
@@ -43,7 +43,7 @@ router.get('/', function (req, res, next) {
 router.get('/section/:id', function (req, res, next) {
   const id = req.param('id');
   let categories = {};
-  let currentPage = parseInt(req.param('page')) || 1;
+  const currentPage = parseInt(req.param('page')) || 1;
   categoriesRef.once('value')
     .then((snapshot) => {
       categories = snapshot.val();
