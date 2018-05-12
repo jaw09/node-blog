@@ -22,11 +22,13 @@
         </div>
       </div>
       <% } %>
-    <% } else { %>
+      <% } else { %>
       <div class="col-md-9">  
         <h2>暫無文章，請耐心等待～</h2>
       </div>
     <% } %>
   </div>
-  <%- include('partials/pagination.ejs')%>
+  <% if(hasArticle) { %>
+    <%- include('partials/pagination.ejs')%>
+  <% } %>
 </div>

@@ -1,24 +1,26 @@
 <% extend('./layouts/layout.ejs') %>
   <div class="main container my-4">
     <div class="row justify-content-center d-flex flex-row-reverse">
+    <div class="col-md-12">
     <% if (hasLogin) { %>
-  <div class="alert alert-success">
-    <%- login %>
-  </div>
-<% } %>
-<div class="col-md-4 mb-3">
-<div class="card">
-  <h4 class="card-header">部落格資訊</h4>
-  <div class="card-body">
-    <p>文章總數：
-      <%- articlesNum %>
-    </p>
-    <p>標籤總數：
-      <%- categoriesNum %>
-    </p>
-  </div>
-</div>
-</div>
+    <div class="alert alert-success">
+      <%- login %>
+    </div>
+    <% } %>
+    </div>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <h4 class="card-header">部落格資訊</h4>
+              <div class="card-body">
+                <p>文章總數：
+                  <%- articlesNum %>
+                </p>
+                <p>標籤總數：
+                  <%- categoriesNum %>
+                </p>
+              </div>
+            </div>
+          </div>
           <div class="col-md-8">
             <div class="btn-group w-100">
               <a href="/dashboard?status=public" class="btn btn-outline-secondary w-100 rounded-0 <% if(status === 'public') { %> active <% } %>">已發佈</a>

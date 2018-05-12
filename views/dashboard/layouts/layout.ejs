@@ -40,14 +40,14 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
+            <div class="navbar-nav mr-auto">
 
                 <a class="nav-item nav-link <% if (page === 'archives') { %> active <% } %>" href="/dashboard">文章管理 </a>
                 <a class="nav-item nav-link <% if (page === 'categories') { %> active <% } %>" href="/dashboard/categories">分類管理 </a>
 
             </div>
+            <a class="nav-link" href="/auth/signout">登出</a>
         </div>
-        <a class="nav-link" href="/auth/signout">登出</a>
     </nav>
     
     <%- content %>
