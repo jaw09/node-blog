@@ -14,7 +14,8 @@
 
 ## 網站實例
 
-- 後台入口：[Node Blog](https://git.heroku.com/jaw-node-blog.git)
+- 前台入口：[Node Blog](https://jaw-node-blog.herokuapp.com)
+- 後台入口：[Node Blog Admin](https://jaw-node-blog.herokuapp.com/dashboard)
 - 可使用 cyborg@gmail.com 登入，密碼 123456
 
 ## 安裝方式
